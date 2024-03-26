@@ -1,0 +1,22 @@
+name: Centralized PR Notifications
+
+on:
+  pull_request:
+    types: [opened, synchronize, closed]
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  notify:
+        uses: kyrylchenko/testTg/.github/workflows/notifyTelegram.yml@main
+        with:
+          event_name: ${{ github.event_name }}
+          action: ${{ github.event.action }}
+          pr_number: ${{ github.event.pull_request.number }}
+          pr_title: ${{ github.event.pull_request.title }}
+          pr_user: ${{ github.event.pull_request.user.login }}
+          pr_url: ${{ github.event.pull_request.html_url }}
+          merged: ${{ github.event.pull_request.merged }}
+          review_state: ${{ github.event.review.state }}
+          reviewer_logins: ${{ join(github.event.pull_request.requested_reviewers.*.login, ',') }}
+          assignee_logins: ${{ join(github.event.pull_request.assignees.*.login, ',') }}
