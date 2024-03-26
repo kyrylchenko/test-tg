@@ -16,7 +16,7 @@ jobs:
           pr_title: ${{ github.event.pull_request.title }}
           pr_user: ${{ github.event.pull_request.user.login }}
           pr_url: ${{ github.event.pull_request.html_url }}
-          merged: ${{ github.event.pull_request.merged }}
+          merged: ${{ github.event.pull_request.merged || false}}
           review_state: ${{ github.event.review.state }}
           reviewer_logins: ${{ join(github.event.pull_request.requested_reviewers.*.login, ',') }}
           assignee_logins: ${{ join(github.event.pull_request.assignees.*.login, ',') }}
