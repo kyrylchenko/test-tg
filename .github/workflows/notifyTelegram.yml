@@ -1,34 +1,31 @@
-name: Notify Telegram
-on:
-  workflow_call:
-    inputs:
-      repo_name:
-        required: true
-        type: string
-      pr_name:
-        required: true
-        type: string
-      assignee:
-        required: false
-        type: string
-      requested_reviewers:
-        required: false
-        type: string
+name: 'Notify Telegram'
+
+on: workflow_call
 
 jobs:
-  send-message:
+  notification_logic:
     runs-on: ubuntu-latest
+    outputs:
+      message: ${{ steps.set_message.outputs.message }}
     steps:
-      - name: Send Message to Telegram
+      - name: Set Notification Message
+        id: set_message
         run: |
-          REPO_NAME="${{ inputs.repo_name }}"
-          PR_NAME="${{ inputs.pr_name }}"
-          ASSIGNEE="${{ inputs.assignee }}"
-          REQUESTED_REVIEWERS="${{ inputs.requested_reviewers }}"
-          
-          MESSAGE="*Repository:* ${REPO_NAME}%0A%0A*PR:* ${PR_NAME}%0A*Assignee:* ${ASSIGNEE}%0A*Reviewers:* ${REQUESTED_REVIEWERS}"
+          MESSAGE="Notification: "
+          if [ "${{ inputs.event_name }}" == "pull_request" ] && [ "${{ inputs.action }}" == "opened" ]; then
+            MESSAGE+="PR #${{ inputs.pr_number }} opened by @${{ inputs.pr_user }} - ${{ inputs.pr_title }}. Check it: ${{ inputs.pr_url }}"
+          elif [ "${{ inputs.event_name }}" == "pull_request_review" ] && [ "${{ inputs.review_state }}" == "changes_requested" ]; then
+            MESSAGE+="Changes requested on PR #${{ inputs.pr_number }} by @${{ inputs.reviewer_logins }}. Review: ${{ inputs.pr_url }}"
+          elif [ "${{ inputs.event_name }}" == "pull_request" ] && [ "${{ inputs.action }}" == "synchronize" ]; then
+            MESSAGE+="PR #${{ inputs.pr_number }} updated after changes requested. Review the updates: ${{ inputs.pr_url }}"
+          elif [ "${{ inputs.event_name }}" == "pull_request_review" ] && [ "${{ inputs.review_state }}" == "approved" ]; then
+            MESSAGE+="PR #${{ inputs.pr_number }} approved by @${{ inputs.reviewer_logins }}. Congratulations! 🎉"
+          fi
+          echo "MESSAGE=$MESSAGE" >> $GITHUB_ENV
+
           curl -X POST "https://api.telegram.org/bot6972170862:AAG4aN5Z8ApFusuToNIE8-zEe6PoJLOSl3U/sendMessage" \
                -H "Content-Type: application/x-www-form-urlencoded" \
                -d "chat_id=-1002018935905" \
                -d "text=$MESSAGE" \
-               -d "parse_mode=Markdown"
+               -d "parse_mode=Markdown" \
+               -d "disable_web_page_preview=true"
