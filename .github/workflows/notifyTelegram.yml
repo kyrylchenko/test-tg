@@ -58,13 +58,13 @@ jobs:
         run: |
           MESSAGE=""
           if [ "${{ inputs.event_name }}" == "pull_request" ] && [ "${{ inputs.action }}" == "opened" ]; then
-           MESSAGE+="🆕 *\#PR${{ inputs.pr_number }}${{ inputs.repo_name }}%0A_${{ inputs.pr_title }}_%0AReviewers: ${{ inputs.reviewer_logins }}%0AAssignee: ${{ inputs.assignee_logins }}%0ACheck it: [Here](${{ inputs.pr_url }})"
+           MESSAGE+="🆕 *\#PR${{ inputs.pr_number }}${{ inputs.repo_name }}*%0A_${{ inputs.pr_title }}_%0AReviewers: ${{ inputs.reviewer_logins }}%0AAssignee: ${{ inputs.assignee_logins }}%0ACheck it: [Here](${{ inputs.pr_url }})"
           elif [ "${{ inputs.event_name }}" == "pull_request_review" ] && [ "${{ inputs.review_state }}" == "changes_requested" ]; then
-           MESSAGE+="⚠️ *\#PR${{ inputs.pr_number }}${{ inputs.repo_name }}%0AChanges requested* by ${{ inputs.reviewer_logins }}.%0AReview: [Here](${{ inputs.pr_url }})"
+           MESSAGE+="⚠️ *\#PR${{ inputs.pr_number }}${{ inputs.repo_name }}*%0AChanges requested* by ${{ inputs.reviewer_logins }}.%0AReview: [Here](${{ inputs.pr_url }})"
           elif [ "${{ inputs.event_name }}" == "pull_request" ] && [ "${{ inputs.action }}" == "synchronize" ]; then
-           MESSAGE+="🔄 *\#PR${{ inputs.pr_number }}${{ inputs.repo_name }}%0AUpdated* after changes requested.%0AReview the updates: [Here](${{ inputs.pr_url }})"
+           MESSAGE+="🔄 *\#PR${{ inputs.pr_number }}${{ inputs.repo_name }}*%0AUpdated* after changes requested.%0AReview the updates: [Here](${{ inputs.pr_url }})"
           elif [ "${{ inputs.event_name }}" == "pull_request_review" ] && [ "${{ inputs.review_state }}" == "approved" ]; then
-           MESSAGE+="✅ *\#PR${{ inputs.pr_number }}${{ inputs.repo_name }}%0AApproved* by ${{ inputs.reviewer_logins }}.%0ACongratulations! 🎉"
+           MESSAGE+="✅ *\#PR${{ inputs.pr_number }}${{ inputs.repo_name }}*%0AApproved* by ${{ inputs.reviewer_logins }}.%0ACongratulations! 🎉"
           fi
 
           echo "MESSAGE=$MESSAGE" >> $GITHUB_ENV
