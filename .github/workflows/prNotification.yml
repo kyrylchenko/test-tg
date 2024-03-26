@@ -20,3 +20,4 @@ jobs:
           review_state: ${{ github.event.review.state }}
           reviewer_logins: ${{ join(github.event.pull_request.requested_reviewers.*.login, ',') }}
           assignee_logins: ${{ join(github.event.pull_request.assignees.*.login, ',') }}
+          repo_name: ${{ github.repository }}
