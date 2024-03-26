@@ -73,5 +73,5 @@ jobs:
                -H "Content-Type: application/x-www-form-urlencoded" \
                -d "chat_id=-1002018935905" \
                -d "text=$MESSAGE" \
-               -d "parse_mode=Markdown" \
+               -d "parse_mode=MarkdownV2" \
                -d "disable_web_page_preview=true"
