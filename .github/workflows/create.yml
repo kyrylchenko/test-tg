@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Trigger Notification Workflow
-        uses: Silent-Team/monorepo/.github/workflows/notifyTelegram.yml@main
+        uses: kyrylchenko/testTg/.github/workflows/notifyTelegram.yml@main
         with:
           event_name: ${{ github.event_name }}
           action: ${{ github.event.action }}
