@@ -1,0 +1,34 @@
+name: Notify Telegram
+on:
+  workflow_call:
+    inputs:
+      repo_name:
+        required: true
+        type: string
+      pr_name:
+        required: true
+        type: string
+      assignee:
+        required: false
+        type: string
+      requested_reviewers:
+        required: false
+        type: string
+
+jobs:
+  send-message:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Message to Telegram
+        run: |
+          REPO_NAME="${{ inputs.repo_name }}"
+          PR_NAME="${{ inputs.pr_name }}"
+          ASSIGNEE="${{ inputs.assignee }}"
+          REQUESTED_REVIEWERS="${{ inputs.requested_reviewers }}"
+          
+          MESSAGE="*Repository:* ${REPO_NAME}%0A%0A*PR:* ${PR_NAME}%0A*Assignee:* ${ASSIGNEE}%0A*Reviewers:* ${REQUESTED_REVIEWERS}"
+          curl -X POST "https://api.telegram.org/bot6972170862:AAG4aN5Z8ApFusuToNIE8-zEe6PoJLOSl3U/sendMessage" \
+               -H "Content-Type: application/x-www-form-urlencoded" \
+               -d "chat_id=-1002018935905" \
+               -d "text=$MESSAGE" \
+               -d "parse_mode=Markdown"
