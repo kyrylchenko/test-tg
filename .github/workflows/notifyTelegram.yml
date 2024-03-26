@@ -54,13 +54,13 @@ jobs:
         run: |
           MESSAGE=""
           if [ "${{ inputs.event_name }}" == "pull_request" ] && [ "${{ inputs.action }}" == "opened" ]; then
-           MESSAGE+="🆕 *PR #${{ inputs.pr_number }}/n opened* by @${{ inputs.pr_user }} - _${{ inputs.pr_title }}_. Check it: [Here](${{ inputs.pr_url }})"
+           MESSAGE+="🆕 *PR #PR${{ inputs.pr_number }}\n opened* by @${{ inputs.pr_user }} - _${{ inputs.pr_title }}_. Check it: [Here](${{ inputs.pr_url }})"
           elif [ "${{ inputs.event_name }}" == "pull_request_review" ] && [ "${{ inputs.review_state }}" == "changes_requested" ]; then
-           MESSAGE+="⚠️ *Changes requested* on PR #${{ inputs.pr_number }} by @${{ inputs.reviewer_logins }}. Review: [Here](${{ inputs.pr_url }})"
+           MESSAGE+="⚠️ *Changes requested*\n on PR #PR${{ inputs.pr_number }} by @${{ inputs.reviewer_logins }}. Review: [Here](${{ inputs.pr_url }})"
           elif [ "${{ inputs.event_name }}" == "pull_request" ] && [ "${{ inputs.action }}" == "synchronize" ]; then
-           MESSAGE+="🔄 *PR #${{ inputs.pr_number }} updated* after changes requested. Review the updates: [Here](${{ inputs.pr_url }})"
+           MESSAGE+="🔄 *PR #PR${{ inputs.pr_number }} updated*\n after changes requested. Review the updates: [Here](${{ inputs.pr_url }})"
           elif [ "${{ inputs.event_name }}" == "pull_request_review" ] && [ "${{ inputs.review_state }}" == "approved" ]; then
-           MESSAGE+="✅ *PR #${{ inputs.pr_number }} approved* by @${{ inputs.reviewer_logins }}. Congratulations! 🎉"
+           MESSAGE+="✅ *PR #PR${{ inputs.pr_number }} approved*\n by @${{ inputs.reviewer_logins }}. Congratulations! 🎉"
           fi
 
           echo "MESSAGE=$MESSAGE" >> $GITHUB_ENV
