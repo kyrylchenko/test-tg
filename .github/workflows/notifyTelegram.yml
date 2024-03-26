@@ -52,9 +52,9 @@ jobs:
       - name: Set Notification Message
         id: set_message
         run: |
-          MESSAGE="*Notification:* "
+          MESSAGE=""
           if [ "${{ inputs.event_name }}" == "pull_request" ] && [ "${{ inputs.action }}" == "opened" ]; then
-           MESSAGE+="🆕 *PR #${{ inputs.pr_number }} opened* by @${{ inputs.pr_user }} - _${{ inputs.pr_title }}_. Check it: [Here](${{ inputs.pr_url }})"
+           MESSAGE+="🆕 *PR #${{ inputs.pr_number }}/n opened* by @${{ inputs.pr_user }} - _${{ inputs.pr_title }}_. Check it: [Here](${{ inputs.pr_url }})"
           elif [ "${{ inputs.event_name }}" == "pull_request_review" ] && [ "${{ inputs.review_state }}" == "changes_requested" ]; then
            MESSAGE+="⚠️ *Changes requested* on PR #${{ inputs.pr_number }} by @${{ inputs.reviewer_logins }}. Review: [Here](${{ inputs.pr_url }})"
           elif [ "${{ inputs.event_name }}" == "pull_request" ] && [ "${{ inputs.action }}" == "synchronize" ]; then
