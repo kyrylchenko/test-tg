@@ -1,0 +1,11 @@
+name: PR Notification
+on: pull_request
+
+jobs:
+  notify:
+    uses: kyrylchenko/testTg/.github/workflows/notifyTelegram.yml@main
+    with:
+      repo_name: ${{ github.repository }}
+      pr_name: ${{ github.event.pull_request.title }}
+      assignee: ${{ github.event.pull_request.assignee.login }}
+      requested_reviewers: ${{ join(github.event.pull_request.requested_reviewers.*.login, ', ') }}
