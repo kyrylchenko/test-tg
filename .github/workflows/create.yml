@@ -8,9 +8,6 @@ on:
 
 jobs:
   notify:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Trigger Notification Workflow
         uses: kyrylchenko/testTg/.github/workflows/notifyTelegram.yml@main
         with:
           event_name: ${{ github.event_name }}
