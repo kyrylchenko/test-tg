@@ -1,7 +1,48 @@
 name: 'Notify Telegram'
 
-on: workflow_call
-
+on: 
+ workflow_call:
+    inputs:
+      event_name:
+        required: true
+        description: 'Name of the GitHub event triggering the notification'
+        type: string
+      action:
+        required: true
+        description: 'Specific action that triggered the event'
+        type: string
+      pr_number:
+        required: false
+        description: 'Number of the pull request'
+        type: string
+      pr_title:
+        required: false
+        description: 'Title of the pull request'
+        type: string
+      pr_user:
+        required: false
+        description: 'Username of the user who created the pull request'
+        type: string
+      pr_url:
+        required: false
+        description: 'URL of the pull request'
+        type: string
+      merged:
+        required: false
+        description: 'Whether the pull request was merged (true/false)'
+        type: boolean
+      review_state:
+        required: false
+        description: 'State of the review (e.g., approved, changes requested)'
+        type: string
+      reviewer_logins:
+        required: false
+        description: 'Comma-separated list of logins for the reviewers of the pull request'
+        type: string
+      assignee_logins:
+        required: false
+        description: 'Comma-separated list of logins for the assignees of the pull request'
+        type: string
 jobs:
   notification_logic:
     runs-on: ubuntu-latest
