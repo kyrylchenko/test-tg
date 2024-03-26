@@ -52,16 +52,17 @@ jobs:
       - name: Set Notification Message
         id: set_message
         run: |
-          MESSAGE="Notification: "
+          MESSAGE="*Notification:* "
           if [ "${{ inputs.event_name }}" == "pull_request" ] && [ "${{ inputs.action }}" == "opened" ]; then
-            MESSAGE+="PR #${{ inputs.pr_number }} opened by @${{ inputs.pr_user }} - ${{ inputs.pr_title }}. Check it: ${{ inputs.pr_url }}"
+           MESSAGE+="🆕 *PR #${{ inputs.pr_number }} opened* by @${{ inputs.pr_user }} - _${{ inputs.pr_title }}_. Check it: [Here](${{ inputs.pr_url }})"
           elif [ "${{ inputs.event_name }}" == "pull_request_review" ] && [ "${{ inputs.review_state }}" == "changes_requested" ]; then
-            MESSAGE+="Changes requested on PR #${{ inputs.pr_number }} by @${{ inputs.reviewer_logins }}. Review: ${{ inputs.pr_url }}"
+           MESSAGE+="⚠️ *Changes requested* on PR #${{ inputs.pr_number }} by @${{ inputs.reviewer_logins }}. Review: [Here](${{ inputs.pr_url }})"
           elif [ "${{ inputs.event_name }}" == "pull_request" ] && [ "${{ inputs.action }}" == "synchronize" ]; then
-            MESSAGE+="PR #${{ inputs.pr_number }} updated after changes requested. Review the updates: ${{ inputs.pr_url }}"
+           MESSAGE+="🔄 *PR #${{ inputs.pr_number }} updated* after changes requested. Review the updates: [Here](${{ inputs.pr_url }})"
           elif [ "${{ inputs.event_name }}" == "pull_request_review" ] && [ "${{ inputs.review_state }}" == "approved" ]; then
-            MESSAGE+="PR #${{ inputs.pr_number }} approved by @${{ inputs.reviewer_logins }}. Congratulations! 🎉"
+           MESSAGE+="✅ *PR #${{ inputs.pr_number }} approved* by @${{ inputs.reviewer_logins }}. Congratulations! 🎉"
           fi
+
           echo "MESSAGE=$MESSAGE" >> $GITHUB_ENV
 
           curl -X POST "https://api.telegram.org/bot6972170862:AAG4aN5Z8ApFusuToNIE8-zEe6PoJLOSl3U/sendMessage" \
