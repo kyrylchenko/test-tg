@@ -1,4 +1,4 @@
-name: Centralized PR Notifications
+name: PR Notification
 
 on:
   pull_request:
