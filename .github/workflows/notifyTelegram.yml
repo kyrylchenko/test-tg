@@ -58,13 +58,13 @@ jobs:
         run: |
           MESSAGE=""
           if [ "${{ inputs.event_name }}" == "pull_request" ] && [ "${{ inputs.action }}" == "opened" ]; then
-           MESSAGE+="🆕 *\#PR${{ inputs.pr_number }}${{ inputs.repo_name }}*%0A_${{ inputs.pr_title }}_%0AReviewers: ${{ inputs.reviewer_logins }}%0AAssignee: ${{ inputs.assignee_logins }}%0ACheck it: [Here](${{ inputs.pr_url }})"
+           MESSAGE+="<b>🆕 #PR${{ inputs.pr_number }}${{ inputs.repo_name }}</b>%0A<i>${{ inputs.pr_title }}</i>%0AReviewers: ${{ inputs.reviewer_logins }}%0AAssignee: ${{ inputs.assignee_logins }}%0ACheck it: <a href='${{ inputs.pr_url }}'>Here</a>"
           elif [ "${{ inputs.event_name }}" == "pull_request_review" ] && [ "${{ inputs.review_state }}" == "changes_requested" ]; then
-           MESSAGE+="⚠️ *\#PR${{ inputs.pr_number }}${{ inputs.repo_name }}*%0AChanges requested* by ${{ inputs.reviewer_logins }}.%0AReview: [Here](${{ inputs.pr_url }})"
+           MESSAGE+="<b>⚠️ #PR${{ inputs.pr_number }}${{ inputs.repo_name }}</b>%0AChanges requested by <b>${{ inputs.reviewer_logins }}</b>.%0AReview: <a href='${{ inputs.pr_url }}'>Here</a>"
           elif [ "${{ inputs.event_name }}" == "pull_request" ] && [ "${{ inputs.action }}" == "synchronize" ]; then
-           MESSAGE+="🔄 *\#PR${{ inputs.pr_number }}${{ inputs.repo_name }}*%0AUpdated* after changes requested.%0AReview the updates: [Here](${{ inputs.pr_url }})"
+           MESSAGE+="<b>🔄 #PR${{ inputs.pr_number }}${{ inputs.repo_name }}</b>%0AUpdated after changes requested.%0AReview the updates: <a href='${{ inputs.pr_url }}'>Here</a>"
           elif [ "${{ inputs.event_name }}" == "pull_request_review" ] && [ "${{ inputs.review_state }}" == "approved" ]; then
-           MESSAGE+="✅ *\#PR${{ inputs.pr_number }}${{ inputs.repo_name }}*%0AApproved* by ${{ inputs.reviewer_logins }}.%0ACongratulations! 🎉"
+           MESSAGE+="<b>✅ #PR${{ inputs.pr_number }}${{ inputs.repo_name }}</b>%0AApproved by <b>${{ inputs.reviewer_logins }}</b>.%0ACongratulations! 🎉"
           fi
 
           echo "MESSAGE=$MESSAGE" >> $GITHUB_ENV
@@ -73,5 +73,5 @@ jobs:
                -H "Content-Type: application/x-www-form-urlencoded" \
                -d "chat_id=-1002018935905" \
                -d "text=$MESSAGE" \
-               -d "parse_mode=MarkdownV2" \
+               -d "parse_mode=HTML" \
                -d "disable_web_page_preview=true"
