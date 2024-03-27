@@ -65,11 +65,11 @@ jobs:
           if [ "${{ inputs.event_name }}" == "pull_request" ] && [ "${{ inputs.action }}" == "opened" ]; then
            MESSAGE+="<b>🆕🟢 #PR${{ inputs.pr_number }}_$REPO_NAME</b>%0A<i>${{ inputs.pr_title }}</i>%0A<b>Reviewers:</b> ${{ inputs.reviewer_logins }}%0A<b>Assignee:</b> ${{ inputs.assignee_logins }}%0ACheck it: <b><a href='${{ inputs.pr_url }}'>Here</a></b>"
           elif [ "${{ inputs.event_name }}" == "pull_request_review" ] && [ "${{ inputs.review_state }}" == "changes_requested" ]; then
-           MESSAGE+="<b>⚠️ #PR${{ inputs.pr_number }}_$REPO_NAME</b>%0A<b>Changes requested%0AReviewer:</b> ${{ inputs.review_user_login }}%0ACheck it: <b><a href='${{ inputs.pr_url }}'>Here</a></b>"
+           MESSAGE+="<b>⚠️ #PR${{ inputs.pr_number }}_$REPO_NAME</b>%0A<i>${{ inputs.pr_title }}</i>%0A<b>Changes requested%0AReviewer:</b> ${{ inputs.review_user_login }}%0ACheck it: <b><a href='${{ inputs.pr_url }}'>Here</a></b>"
           elif [ "${{ inputs.event_name }}" == "pull_request" ] && [ "${{ inputs.action }}" == "review_requested" ]; then
-           MESSAGE+="<b>👀 #PR${{ inputs.pr_number }}_$REPO_NAME</b>%0A<b>(Re-)Review requested</b>%0ACheck it: <a href='${{ inputs.pr_url }}'>Here</a>"
+           MESSAGE+="<b>👀 #PR${{ inputs.pr_number }}_$REPO_NAME</b>%0A<i>${{ inputs.pr_title }}</i>%0A<b>(Re-)Review requested</b>%0ACheck it: <a href='${{ inputs.pr_url }}'>Here</a>"
           elif [ "${{ inputs.event_name }}" == "pull_request_review" ] && [ "${{ inputs.review_state }}" == "approved" ]; then
-           MESSAGE+="<b>✅ #PR${{ inputs.pr_number }}_$REPO_NAME</b>%0AApproved by <b>${{ inputs.reviewer_logins }}</b>.%0ACongratulations! 🎉"
+           MESSAGE+="<b>✅ #PR${{ inputs.pr_number }}_$REPO_NAME</b>%0A<i>${{ inputs.pr_title }}</i>%0AReviewer: <b>${{ inputs.review_user_login }}</b>%0ACongratulations! 🎉"
           fi
 
           echo "MESSAGE=$MESSAGE" >> $GITHUB_ENV
