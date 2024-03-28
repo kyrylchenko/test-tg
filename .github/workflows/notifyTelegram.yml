@@ -60,23 +60,26 @@ jobs:
       - name: Set Notification Message
         id: set_message
         run: |
-          MESSAGE=""
-          REPO_NAME=$(echo "${{ github.repository }}" | cut -d'/' -f2 | tr '-' '_')
-          if [ "${{ inputs.event_name }}" == "pull_request" ] && [ "${{ inputs.action }}" == "opened" ]; then
-           MESSAGE+="<b>🆕🟢 #PR${{ inputs.pr_number }}_$REPO_NAME</b>%0A<i>${{ inputs.pr_title }}</i>%0A<b>Reviewers:</b> ${{ inputs.reviewer_logins }}%0A<b>Assignee:</b> ${{ inputs.assignee_logins }}%0ACheck it: <b><a href='${{ inputs.pr_url }}'>Here</a></b>"
-          elif [ "${{ inputs.event_name }}" == "pull_request_review" ] && [ "${{ inputs.review_state }}" == "changes_requested" ]; then
-           MESSAGE+="<b>⚠️ #PR${{ inputs.pr_number }}_$REPO_NAME</b>%0A<i>${{ inputs.pr_title }}</i>%0A<b>Changes requested%0AReviewer:</b> ${{ inputs.review_user_login }}%0ACheck it: <b><a href='${{ inputs.pr_url }}'>Here</a></b>"
-          elif [ "${{ inputs.event_name }}" == "pull_request" ] && [ "${{ inputs.action }}" == "review_requested" ]; then
-           MESSAGE+="<b>🔄👀 #PR${{ inputs.pr_number }}_$REPO_NAME</b>%0A<i>${{ inputs.pr_title }}</i>%0A<b>(Re-)Review requested</b>%0A<b>Reviewers:</b> ${{ inputs.reviewer_logins }}%0A<b>Assignee:</b> ${{ inputs.assignee_logins }}%0ACheck it: <a href='${{ inputs.pr_url }}'>Here</a>"
-          elif [ "${{ inputs.event_name }}" == "pull_request_review" ] && [ "${{ inputs.review_state }}" == "approved" ]; then
-           MESSAGE+="<b>✅ #PR${{ inputs.pr_number }}_$REPO_NAME</b>%0A<i>${{ inputs.pr_title }}</i>%0A<b>Approved</b>%0A<b>Reviewer: </b>${{ inputs.review_user_login }}%0ACongratulations! 🎉%0ACheck it: <a href='${{ inputs.pr_url }}'>Here</a>"
-          fi
+          API_URL="https://wiry-fuchsia-snagglefoot.glitch.me/receive"
+          BEARER_TOKEN="YourActualBearerTokenHere"
 
-          echo "MESSAGE=$MESSAGE" >> $GITHUB_ENV
+          JSON_PAYLOAD=$(jq -n \
+                  --arg event_name "${{ inputs.event_name }}" \
+                  --arg action "${{ inputs.action }}" \
+                  --arg pr_number "${{ inputs.pr_number }}" \
+                  --arg pr_title "${{ inputs.pr_title }}" \
+                  --arg pr_user "${{ inputs.pr_user }}" \
+                  --arg pr_url "${{ inputs.pr_url }}" \
+                  --arg merged "${{ inputs.merged }}" \
+                  --arg review_state "${{ inputs.review_state }}" \
+                  --arg reviewer_logins "${{ inputs.reviewer_logins }}" \
+                  --arg assignee_logins "${{ inputs.assignee_logins }}" \
+                  --arg repo_name "$REPO_NAME" \
+                  --arg review_user_login "${{ inputs.review_user_login }}" \
+                  '{event_name: $event_name, action: $action, pr_number: $pr_number, pr_title: $pr_title, pr_user: $pr_user, pr_url: $pr_url, merged: $merged, review_state: $review_state, reviewer_logins: $reviewer_logins, assignee_logins: $assignee_logins, repo_name: $repo_name, review_user_login: $review_user_login}')
 
-          curl -X POST "https://api.telegram.org/bot6972170862:AAG4aN5Z8ApFusuToNIE8-zEe6PoJLOSl3U/sendMessage" \
-               -H "Content-Type: application/x-www-form-urlencoded" \
-               -d "chat_id=-1002018935905" \
-               -d "text=$MESSAGE" \
-               -d "parse_mode=HTML" \
-               -d "disable_web_page_preview=true"
+
+          curl -X POST "$API_URL" \
+                   -H "Content-Type: application/json" \
+                   -H "Authorization: Bearer $BEARER_TOKEN" \
+                   -d "$JSON_PAYLOAD"
