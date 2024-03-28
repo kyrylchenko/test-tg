@@ -74,8 +74,8 @@ jobs:
                   --arg review_state "${{ inputs.review_state }}" \
                   --arg reviewer_logins "${{ inputs.reviewer_logins }}" \
                   --arg assignee_logins "${{ inputs.assignee_logins }}" \
-                  --arg repo_name "$REPO_NAME" \
-                  --arg review_user_login "${{ inputs.review_user_login }}" \
+                  --arg repo_name "${{ inputs.assignee_logins }}" \
+                  --arg review_user_login "${{ inputs.repo_name }}" \
                   '{event_name: $event_name, action: $action, pr_number: $pr_number, pr_title: $pr_title, pr_user: $pr_user, pr_url: $pr_url, merged: $merged, review_state: $review_state, reviewer_logins: $reviewer_logins, assignee_logins: $assignee_logins, repo_name: $repo_name, review_user_login: $review_user_login}')
 
 
